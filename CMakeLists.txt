@@ -44,7 +44,13 @@ target_include_directories(${PROJECT_NAME}
 )
 
 # generate a source file and build it to verify syntax
-file(GLOB_RECURSE HEADER_FILES "${INCLUDES}/*.hpp")
+file(GLOB_RECURSE ALL_HEADER_FILES "${INCLUDES}/*.hpp")
+foreach(file ${ALL_HEADER_FILES})
+    # Exclude files in the "platform" directory
+    if (NOT file MATCHES ".*/platform/.*")
+        list(APPEND HEADER_FILES ${file})
+    endif()
+endforeach()
 file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/compilation_test.cpp" "")
 foreach(HEADER_FILE ${HEADER_FILES})
     file(RELATIVE_PATH FILE_RELATIVE_PATH
